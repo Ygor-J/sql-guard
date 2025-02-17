@@ -1,0 +1,13 @@
+[project]
+name = "sql-validator"
+version = "0.0.2"
+authors = [
+  { name="Ygor Jesus", email="ygorj.skat@gmail.com" },
+]
+description = "A small package for data quality using Standard SQL"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
