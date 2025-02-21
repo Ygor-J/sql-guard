@@ -1,14 +1,19 @@
+from typing import Dict, List, Optional
 
 
-class SQLDataSchema:
+class ValidationCheck:
+    pass
 
-    def __init__(self, data_rules: dict):
+class SQLValidator:
+
+    def __init__(self, data_constraints: Dict[str, List[ValidationCheck]]):
         '''
-        Create a SQLDataSchema object that can create SQL validations based on data quality rules.
+        Create a SQLValidator object that can create SQL validations based on data quality rules.
 
         :param data_rules: Dictionary of data quality rules
+
         '''
-        self.data_rules = data_rules
+        self.data_rules = data_constraints
 
     def __str__(self) -> str:
         return self.data_rules

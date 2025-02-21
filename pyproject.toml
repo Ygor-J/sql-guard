@@ -1,5 +1,5 @@
 [project]
-name = "sql-validator"
+name = "sql-guard"
 version = "0.0.2"
 authors = [
   { name="Ygor Jesus", email="ygorj.skat@gmail.com" },
