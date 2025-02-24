@@ -1,12 +1,7 @@
 from typing import Dict, List, Optional
 from dataclasses import dataclass
-
-@dataclass
-class ValidationCheck:
-    '''Base class for validation checks'''
-    check_name: str
-    params: dict
-    error_msg: Optional[str] = None
+from CheckBase import ValidationCheck
+from CheckImplementations import CheckRegistry
 
 class SQLValidator:
 
@@ -32,7 +27,7 @@ class SQLValidator:
                     raise ValueError(f"Invalid ValidationCheck for column {column}")
 
 
-    def to_sql(self, from_source: str='your_table') -> str:
+    def to_sql(self, from_source: str="your_table") -> str:
 
         val_conditions = list()
         invalid_values = list()
@@ -40,37 +35,12 @@ class SQLValidator:
         for column, rules in self.data_rules.items():
             column_conditions = list()
             for rule in rules:
-                check_name = rule.check_name
-                if check_name == 'is_integer':
-                    column_conditions.append(f'SAFE_CAST({column} AS INT) IS NULL')
-                if check_name == 'is_string':
-                    column_conditions.append(f'SAFE_CAST({column} AS STRING) IS NULL')
-                if check_name == 'is_boolean':
-                    column_conditions.append(f'SAFE_CAST({column} AS BOOL) IS NULL')
-                if check_name == 'is_float':
-                    column_conditions.append(f'SAFE_CAST({column} AS FLOAT) IS NULL')
-                if check_name == 'is_date':
-                    column_conditions.append(f'SAFE_CAST({column} AS DATE) IS NULL')
-                if check_name == 'is_timestamp':
-                    column_conditions.append(f'SAFE_CAST({column} AS TIMESTAMP) IS NULL')
-                elif check_name == 'greater_than':
-                    value = rule.params['value']
-                    column_conditions.append(f"{column} <= {value}")
-                elif check_name == 'starts_with':
-                    value = rule.params['value']
-                    column_conditions.append(f"{column} NOT LIKE '{value}%'")
-                elif check_name == 'ends_with':
-                    value = rule.params['value']
-                    column_conditions.append(f"{column} NOT LIKE '%{value}'")
-                elif check_name == 'str_contains':
-                    value = rule.params['value']
-                    column_conditions.append(f"{column} NOT LIKE '%{value}%'")
-                elif check_name == 'regex_contains':
-                    value = rule.params['value']
-                    column_conditions.append(f"NOT REGEXP_CONTAINS({column}, '{value}'")
+                registry_obj = CheckRegistry.get_check(rule.check_name)
+                sql_condition = registry_obj.to_sql(column, rule.params, "GoogleSQl")
+                column_conditions.append(sql_condition)
 
             if column_conditions:
-                val_conditions.append(' OR '.join(column_conditions))
+                val_conditions.append(" OR ".join(column_conditions))
                 invalid_values.append(f"IFNULL(ARRAY_AGG(IF({' OR '.join(column_conditions)}, SAFE_CAST({column} AS STRING), NULL) IGNORE NULLS), [])")
 
 
@@ -85,7 +55,7 @@ class SQLValidator:
             SELECT 
                 CASE 
                     WHEN wrong_count > 0 THEN 
-                        'There were ' || wrong_count || ' columns wrong'
+                        'There were ' || wrong_count || ' values wrong'
                     ELSE 
                         'All values are valid'
                 END AS validation_result,
@@ -107,6 +77,10 @@ rules = {
             check_name="greater_than",
             params={"value": 0},
             error_msg="Age must be positive"
+        ),
+         ValidationCheck(
+            check_name="between",
+            params={"min": 0, 'max': 10}
         )
     ],
     "email": [
@@ -114,6 +88,11 @@ rules = {
             check_name="starts_with",
             params={"value": "user_"},
             error_msg="Invalid email format"
+        ),
+        ValidationCheck(
+            check_name="regex_contains",
+            params={"value": "^[^@]+@[^@]+\.[^@]+$"},
+            error_msg="Invalid regex email format"
         )
     ]
 }
