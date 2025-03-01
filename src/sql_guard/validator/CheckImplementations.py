@@ -1,4 +1,4 @@
-from CheckBase import BaseCheck, CheckRegistry
+from sql_guard.validator.CheckBase import BaseCheck, CheckRegistry
 from sql_guard.utils import SQLHelpers
 from typing import Dict
 
