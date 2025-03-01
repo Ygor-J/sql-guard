@@ -1,10 +1,10 @@
 from dataclasses import dataclass
-from typing import Optional, Dict
+from typing import Optional, Dict, List
 from abc import ABC, abstractmethod
 
 @dataclass
 class ValidationCheck:
-    '''Base class for validation checks'''
+    """Base class for validation checks"""
     check_name: str
     params: dict
     error_msg: Optional[str] = None
@@ -31,3 +31,11 @@ class CheckRegistry:
     @classmethod
     def get_check(cls, name: str) -> BaseCheck:
         return cls._registry[name]
+    
+    @classmethod
+    def get_all_checks(cls) -> List[str]:
+        """
+        Returns the name of all checks registered.
+
+        """
+        return cls._registry.keys()

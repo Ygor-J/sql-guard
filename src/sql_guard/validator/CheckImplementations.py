@@ -2,6 +2,8 @@ from sql_guard.validator.CheckBase import BaseCheck, CheckRegistry
 from sql_guard.utils import SQLHelpers
 from typing import Dict
 
+# Type Checks
+
 @CheckRegistry.register("is_integer")
 class IsIntegerCheck(BaseCheck):
     def to_sql(self, column: str, params: Dict, dialect: str, ignore_nulls: bool) -> str:
@@ -37,6 +39,8 @@ class IsTimestampCheck(BaseCheck):
     def to_sql(self, column: str, params: Dict, dialect: str, ignore_nulls: bool) -> str:
         ignore_nulls_condition = SQLHelpers.get_ignore_nulls_condition(column, ignore_nulls)
         return f"SAFE_CAST({column} AS TIMESTAMP) IS NOT NULL" + ignore_nulls_condition
+
+# Comparison Checks
 
 @CheckRegistry.register("greater_than")
 class GreaterThanCheck(BaseCheck):
@@ -78,7 +82,9 @@ class GreaterThanCheck(BaseCheck):
         value = params["value"]
         ignore_nulls_condition = SQLHelpers.get_ignore_nulls_condition(column, ignore_nulls)
         return f"{column} <= {value}" + ignore_nulls_condition
-    
+
+# String Manipulation Checks
+
 @CheckRegistry.register("starts_with")
 class StartsWithCheck(BaseCheck):
     def to_sql(self, column: str, params: Dict, dialect: str, ignore_nulls: bool) -> str:
@@ -106,7 +112,9 @@ class EndsWithCheck(BaseCheck):
         value = params["value"]
         ignore_nulls_condition = SQLHelpers.get_ignore_nulls_condition(column, ignore_nulls)
         return f"REGEXP_CONTAINS({column}, r'{value}')" + ignore_nulls_condition
-    
+
+# Range Checks
+   
 @CheckRegistry.register("between")
 class BetweenCheck(BaseCheck):
     def to_sql(self, column: str, params: Dict, dialect: str, ignore_nulls: bool)  -> str:
@@ -120,7 +128,7 @@ class BetweenCheck(BaseCheck):
 @CheckRegistry.register("is_in")
 class BetweenCheck(BaseCheck):
     def to_sql(self, column: str, params: Dict, dialect: str, ignore_nulls: bool) -> str:
-        values = params['value']
+        values = params["value"]
         values = str(values)
         values = values[1:-1]
 
@@ -131,7 +139,7 @@ class BetweenCheck(BaseCheck):
 @CheckRegistry.register("is_not_in")
 class BetweenCheck(BaseCheck):
     def to_sql(self, column: str, params: Dict, dialect: str, ignore_nulls: bool) -> str:
-        values = params['value']
+        values = params["value"]
         values = str(values)
         values = values[1:-1]
 
