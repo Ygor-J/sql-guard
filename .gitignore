@@ -8,3 +8,4 @@ dist/
 
 src/sql_validator.egg-info/
 *.egg-info
+test.py
