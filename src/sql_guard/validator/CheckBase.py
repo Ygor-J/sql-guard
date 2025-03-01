@@ -8,6 +8,7 @@ class ValidationCheck:
     check_name: str
     params: dict
     error_msg: Optional[str] = None
+    ignore_nulls: bool = False
 
 class BaseCheck(ABC):
     """Abstract base class for all data quality checks"""

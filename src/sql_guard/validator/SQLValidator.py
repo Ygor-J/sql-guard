@@ -41,7 +41,7 @@ class SQLValidator:
             column_conditions = list()
             for rule in rules:
                 registry_obj = CheckRegistry.get_check(rule.check_name)
-                sql_condition = registry_obj.to_sql(column, rule.params, "GoogleSQl")
+                sql_condition = registry_obj.to_sql(column, rule.params, self.sql_dialect, rule.ignore_nulls)
                 column_conditions.append(f"({sql_condition})")
 
             if column_conditions:
@@ -72,12 +72,14 @@ rules = {
         ValidationCheck(
             check_name="is_integer",
             params={},
-            error_msg="Age must be an integer"
+            error_msg="Age must be an integer",
+            ignore_nulls=True
         ),
         ValidationCheck(
             check_name="greater_or_equal_than",
             params={"value": 18},
-            error_msg="Age must be over 18"
+            error_msg="Age must be over 18",
+            ignore_nulls=True
         )
     ],
     "name": [
