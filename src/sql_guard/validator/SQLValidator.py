@@ -93,4 +93,4 @@ rules = {
 
 myTableSChema = SQLValidator(rules)
 
-print(myTableSChema.to_sql(wrong_values=True))
+print(myTableSChema.to_sql(wrong_values=False))

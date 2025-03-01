@@ -7,3 +7,4 @@ dist/
 .vscode*
 
 src/sql_validator.egg-info/
+*.egg-info
