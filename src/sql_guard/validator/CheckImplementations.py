@@ -26,7 +26,7 @@ class isBooleanCheck(BaseCheck):
 class IsFloatCheck(BaseCheck):
     def to_sql(self, column: str, params: Dict, dialect: str, ignore_nulls: bool) -> str:
         ignore_nulls_condition = SQLHelpers.get_ignore_nulls_condition(column, ignore_nulls)
-        return f"SAFE_CAST({column} AS FLOAT) IS NOT NULL" + ignore_nulls_condition
+        return f"SAFE_CAST({column} AS FLOAT64) IS NOT NULL" + ignore_nulls_condition
 
 @CheckRegistry.register("is_date")
 class IsDateCheck(BaseCheck):

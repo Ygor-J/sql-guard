@@ -1,6 +1,6 @@
 from pandera import Check
 from typing import Dict, Any
-
+import numpy as np
 
 # Params returned should be equivalent to ValidationCheck params
 # See github for list of classmethods checks
@@ -15,7 +15,10 @@ PANDERA_PARAM_MAPPER_FUNC = {
     "starts_with": lambda params: {"value": params["string"]},
     "ends_with": lambda params: {"value": params["string"]},
     "str_contains": lambda params: {"value": params["pattern"]},
-    "regex_contains": lambda params: {"value": params["pattern"]}
+    "regex_contains": lambda params: {"value": params["pattern"]},
+    "between": lambda params: {"min": params["min_value"], "max": params["max_value"]},
+    "is_in": lambda params: {"value": params["allowed_values"]},
+    "is_not_in": lambda params: {"value": params["forbidden_values"]}
 }
 
 PANDERA_CHECK_MAPPING = {
@@ -62,5 +65,103 @@ PANDERA_CHECK_MAPPING = {
     "str_matches": {
         "check_name": "regex_contains",
         "param_mapper": PANDERA_PARAM_MAPPER_FUNC["regex_contains"]
+    },
+
+    # Range Checks
+    "between": {
+        "check_name": "between",
+        "param_mapper": PANDERA_PARAM_MAPPER_FUNC["between"]
+    },
+    "isin": {
+        "check_name": "is_in",
+        "param_mapper": PANDERA_PARAM_MAPPER_FUNC["is_in"]
+    },
+    "notin": {
+        "check_name": "is_not_in",
+        "param_mapper": PANDERA_PARAM_MAPPER_FUNC["is_not_in"]
+    },
+}
+
+
+# consult numpy doc: https://github.com/numpy/numpy/blob/main/numpy/dtypes.pyi
+# Pandera dtypes use numpy dtype in the background
+
+NUMPY_DTYPES = [np.dtypes.__dict__[key] for key in np.dtypes.__all__]
+
+PANDERA_NUMPY_DTYPES_MAPPING = {
+    np.dtypes.BoolDType: {
+        "check_name": "is_boolean"
+    },
+    np.dtypes.Int8DType: {
+        "check_name": "is_integer"
+    },
+    np.dtypes.UInt8DType: {
+        "check_name": None
+    },
+    np.dtypes.Int16DType: {
+        "check_name": "is_integer"
+    },
+    np.dtypes.UInt16DType: {
+        "check_name": None
+    },
+    np.dtypes.Int32DType: {
+        "check_name": "is_integer"
+    },
+    np.dtypes.UInt32DType: {
+        "check_name": None
+    },
+    np.dtypes.Int64DType: {
+        "check_name": "is_integer"
+    },
+    np.dtypes.UInt64DType: {
+        "check_name": None
+    },
+    np.dtypes.LongLongDType: {
+        "check_name": None
+    },
+    np.dtypes.ULongLongDType: {
+        "check_name": None
+    },
+    np.dtypes.Float16DType: {
+        "check_name": "is_float"
+    },
+    np.dtypes.Float32DType: {
+        "check_name": "is_float"
+    },
+    np.dtypes.Float64DType: {
+        "check_name": "is_float"
+    },
+    np.dtypes.LongDoubleDType: {
+        "check_name": None
+    },
+    np.dtypes.Complex64DType: {
+        "check_name": None
+    },
+    np.dtypes.Complex128DType: {
+        "check_name": None
+    },
+    np.dtypes.CLongDoubleDType: {
+        "check_name": None
+    },
+    np.dtypes.ObjectDType: {
+        "check_name": None
+    },
+    np.dtypes.BytesDType: {
+        "check_name": None
+    },
+    np.dtypes.StrDType: {
+        "check_name": "is_string"
+    },
+    np.dtypes.VoidDType: {
+        "check_name": None
+    },
+    np.dtypes.DateTime64DType: {
+        "check_name": "is_date"
+    },
+    np.dtypes.TimeDelta64DType: {
+        "check_name": None
+    },
+    np.dtypes.StringDType: {
+        "check_name": "is_string"
     }
 }

@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 class ValidationCheck:
     """Base class for validation checks"""
     check_name: str
-    params: dict
+    params: dict = None
     error_msg: Optional[str] = None
     ignore_nulls: bool = False
 
