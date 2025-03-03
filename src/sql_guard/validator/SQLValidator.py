@@ -76,11 +76,12 @@ class SQLValidator:
         
         return sql_query.strip()
     
-    def generate_sql_report(self, from_source: str = "your_table") -> str:
+    def generate_sql_report(self, from_source: str = "your_table", n_wrong_values: bool = False) -> str:
         '''
         Generate a SQL query that returns a report of failed validation checks.
 
         :param from_source: The origin table of the FROM clause.
+        :param n_wrong_values: Flag for getting number of wrong values instead of the actual values.
         '''
         union_queries = []
 
@@ -104,6 +105,24 @@ class SQLValidator:
 
         union_query = "\nUNION ALL\n".join(union_queries)
 
+        if n_wrong_values:
+            sql_query = f"""
+
+            WITH
+
+            tb AS (
+
+                {union_query}
+
+            )
+
+            SELECT column_name, check_name, params, error_msg, ignore_nulls, COUNT(DISTINCT(wrong_value)) AS n_wrong_values FROM tb
+            GROUP BY ALL
+
+            """
+
+            return sql_query.strip()
+
         sql_query = f"""
 
         WITH
@@ -119,5 +138,8 @@ class SQLValidator:
         """
 
         return sql_query.strip()
+    
+
+        
 
 
