@@ -1,6 +1,7 @@
 from typing import Dict, List
 from sql_guard.validator.CheckBase import ValidationCheck
 from sql_guard.validator.CheckImplementations import CheckRegistry
+import logging
 
 class SQLValidator:
 
@@ -13,7 +14,9 @@ class SQLValidator:
 
         '''
         self.data_rules = data_rules
-        self.sql_dialect = sql_dialect
+        if sql_dialect != "GoogleSQL":
+            logging.warning("WARNING: SQLDIALECT: Only have support for GoogleSQL so far. Default value will be set to GoogleSQL!")
+        self.sql_dialect = "GoogleSQL"
         self._validate_schema()
         self.column_sql_rules, self.data_sql_rules = self._build_sql_conditions()
 
