@@ -72,6 +72,10 @@ PANDERA_CHECK_MAPPING = {
         "check_name": "between",
         "param_mapper": PANDERA_PARAM_MAPPER_FUNC["between"]
     },
+    "in_range": {
+        "check_name": "between",
+        "param_mapper": PANDERA_PARAM_MAPPER_FUNC["between"]
+    },
     "isin": {
         "check_name": "is_in",
         "param_mapper": PANDERA_PARAM_MAPPER_FUNC["is_in"]

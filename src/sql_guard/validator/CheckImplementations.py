@@ -61,13 +61,18 @@ class GreaterThanCheck(BaseCheck):
     def to_sql(self, column: str, params: Dict, dialect: str, ignore_nulls: bool) -> str:
         value = params["value"]
         ignore_nulls_condition = SQLHelpers.get_ignore_nulls_condition(column, ignore_nulls)
-        return f"{column} = {value}" + ignore_nulls_condition
+        if type(value) in [int, float, bool]:
+            return f"{column} = {value}" + ignore_nulls_condition
+        return f"{column} = '{value}'" + ignore_nulls_condition
 
 @CheckRegistry.register("not_equal")
 class GreaterThanCheck(BaseCheck):
     def to_sql(self, column: str, params: Dict, dialect: str, ignore_nulls: bool) -> str:
         value = params["value"]
-        return f"{column} != {value}"
+        ignore_nulls_condition = SQLHelpers.get_ignore_nulls_condition(column, ignore_nulls)
+        if type(value) in [int, float, bool]:
+            return f"{column} = {value}" + ignore_nulls_condition
+        return f"{column} != '{value}'" + ignore_nulls_condition
 
 @CheckRegistry.register("less_than")
 class GreaterThanCheck(BaseCheck):
