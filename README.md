@@ -45,7 +45,7 @@ from sql_guard.validator.CheckBase import ValidationCheck
 
 data_rules = {
 
-    {'name': [ValidationCheck(check_name='is_string',
+    'name': [ValidationCheck(check_name='is_string',
                             params=None,
                             error_msg=None,
                             ignore_nulls=False),
@@ -152,5 +152,17 @@ validation_query = sql_schema.generate_sql_report(from_source=TABLE_PATH, n_wron
   }
 }
 ```
+
+## Details
+
+For detailed usage of package, visit `docs/` folder and take a look at two notebooks in order:
+- demo.ipynb
+- demo_duckdb.ipynb
+
+## Install
+
+Just create your virtual environment and run:  
+`pip install sql-guard`
+
 
 

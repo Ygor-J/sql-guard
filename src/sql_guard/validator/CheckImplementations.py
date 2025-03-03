@@ -4,41 +4,115 @@ from typing import Dict
 
 # Type Checks
 
+# https://duckdb.org/docs/stable/clients/python/types
+
 @CheckRegistry.register("is_integer")
 class IsIntegerCheck(BaseCheck):
     def to_sql(self, column: str, params: Dict, dialect: str, ignore_nulls: bool) -> str:
         ignore_nulls_condition = SQLHelpers.get_ignore_nulls_condition(column, ignore_nulls)
-        return f"SAFE_CAST({column} AS INT) IS NOT NULL" + ignore_nulls_condition
+
+        casting_function = ""
+        cast_type = ""
+        if dialect == "GoogleSQL":
+            casting_function = "SAFE_CAST"
+            cast_type = "INT"
+        elif dialect == "DuckDBSQL":
+            casting_function = "TRY_CAST"
+            cast_type = "BIGINT"
+        else:
+            raise ValueError(f"ERROR: {dialect} dialect is not supported! Only GoogleSQL and DuckDBSQL are available!")
+
+        return f"{casting_function}({column} AS {cast_type}) IS NOT NULL" + ignore_nulls_condition
 
 @CheckRegistry.register("is_string")
 class IsStringCheck(BaseCheck):
     def to_sql(self, column: str, params: Dict, dialect: str, ignore_nulls: bool) -> str:
         ignore_nulls_condition = SQLHelpers.get_ignore_nulls_condition(column, ignore_nulls)
-        return f"SAFE_CAST({column} AS STRING) IS NOT NULL" + ignore_nulls_condition
+
+        casting_function = ""
+        cast_type = ""
+        if dialect == "GoogleSQL":
+            casting_function = "SAFE_CAST"
+            cast_type = "STRING"
+        elif dialect == "DuckDBSQL":
+            casting_function = "TRY_CAST"
+            cast_type = "VARCHAR"
+        else:
+            raise ValueError(f"ERROR: {dialect} dialect is not supported! Only GoogleSQL and DuckDBSQL are available!")
+
+        return f"{casting_function}({column} AS {cast_type}) IS NOT NULL" + ignore_nulls_condition
 
 @CheckRegistry.register("is_boolean")
 class isBooleanCheck(BaseCheck):
     def to_sql(self, column: str, params: Dict, dialect: str, ignore_nulls: bool) -> str:
         ignore_nulls_condition = SQLHelpers.get_ignore_nulls_condition(column, ignore_nulls)
-        return f"SAFE_CAST({column} AS BOOL) IS NOT NULL" + ignore_nulls_condition
+
+        casting_function = ""
+        cast_type = ""
+        if dialect == "GoogleSQL":
+            casting_function = "SAFE_CAST"
+            cast_type = "BOOL"
+        elif dialect == "DuckDBSQL":
+            casting_function = "TRY_CAST"
+            cast_type = "BOOLEAN"
+        else:
+            raise ValueError(f"ERROR: {dialect} dialect is not supported! Only GoogleSQL and DuckDBSQL are available!")
+
+        return f"{casting_function}({column} AS {cast_type}) IS NOT NULL" + ignore_nulls_condition
 
 @CheckRegistry.register("is_float")
 class IsFloatCheck(BaseCheck):
     def to_sql(self, column: str, params: Dict, dialect: str, ignore_nulls: bool) -> str:
         ignore_nulls_condition = SQLHelpers.get_ignore_nulls_condition(column, ignore_nulls)
-        return f"SAFE_CAST({column} AS FLOAT64) IS NOT NULL" + ignore_nulls_condition
+
+        casting_function = ""
+        cast_type = ""
+        if dialect == "GoogleSQL":
+            casting_function = "SAFE_CAST"
+            cast_type = "FLOAT64"
+        elif dialect == "DuckDBSQL":
+            casting_function = "TRY_CAST"
+            cast_type = "DOUBLE"
+        else:
+            raise ValueError(f"ERROR: {dialect} dialect is not supported! Only GoogleSQL and DuckDBSQL are available!")
+
+        return f"{casting_function}({column} AS {cast_type}) IS NOT NULL" + ignore_nulls_condition
 
 @CheckRegistry.register("is_date")
 class IsDateCheck(BaseCheck):
     def to_sql(self, column: str, params: Dict, dialect: str, ignore_nulls: bool) -> str:
         ignore_nulls_condition = SQLHelpers.get_ignore_nulls_condition(column, ignore_nulls)
-        return f"SAFE_CAST({column} AS DATE) IS NOT NULL" + ignore_nulls_condition
+
+        casting_function = ""
+        cast_type = ""
+        if dialect == "GoogleSQL":
+            casting_function = "SAFE_CAST"
+            cast_type = "DATE"
+        elif dialect == "DuckDBSQL":
+            casting_function = "TRY_CAST"
+            cast_type = "DATE"
+        else:
+            raise ValueError(f"ERROR: {dialect} dialect is not supported! Only GoogleSQL and DuckDBSQL are available!")
+
+        return f"{casting_function}({column} AS {cast_type}) IS NOT NULL" + ignore_nulls_condition
 
 @CheckRegistry.register("is_timestamp")
 class IsTimestampCheck(BaseCheck):
     def to_sql(self, column: str, params: Dict, dialect: str, ignore_nulls: bool) -> str:
         ignore_nulls_condition = SQLHelpers.get_ignore_nulls_condition(column, ignore_nulls)
-        return f"SAFE_CAST({column} AS TIMESTAMP) IS NOT NULL" + ignore_nulls_condition
+
+        casting_function = ""
+        cast_type = ""
+        if dialect == "GoogleSQL":
+            casting_function = "SAFE_CAST"
+            cast_type = "TIMESTAMP"
+        elif dialect == "DuckDBSQL":
+            casting_function = "TRY_CAST"
+            cast_type = "TIMESTAMP"
+        else:
+            raise ValueError(f"ERROR: {dialect} dialect is not supported! Only GoogleSQL and DuckDBSQL are available!")
+
+        return f"{casting_function}({column} AS {cast_type}) IS NOT NULL" + ignore_nulls_condition
 
 # Comparison Checks
 
@@ -116,7 +190,19 @@ class EndsWithCheck(BaseCheck):
     def to_sql(self, column: str, params: Dict, dialect: str, ignore_nulls: bool) -> str:
         value = params["value"]
         ignore_nulls_condition = SQLHelpers.get_ignore_nulls_condition(column, ignore_nulls)
-        return f"REGEXP_CONTAINS({column}, r'{value}')" + ignore_nulls_condition
+
+        regex_function = ""
+        expression_symbol = ""
+        if dialect == "GoogleSQL":
+            regex_function = "REGEXP_CONTAINS"
+            expression_symbol = "r"
+        elif dialect == "DuckDBSQL":
+            regex_function = "REGEXP_MATCHES"
+            expression_symbol = "E"
+        else:
+            raise ValueError(f"ERROR: {dialect} dialect is not supported! Only GoogleSQL and DuckDBSQL are available!")
+
+        return f"{regex_function}({column}, {expression_symbol}'{value}')" + ignore_nulls_condition
 
 # Range Checks
    

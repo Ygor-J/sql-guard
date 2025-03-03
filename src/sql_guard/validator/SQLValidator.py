@@ -10,13 +10,15 @@ class SQLValidator:
         Create a SQLValidator object that can create SQL validations based on data quality rules.
 
         :param data_rules: Dictionary of data quality rules
-        :param sql_dialect: SQL Dialect of SQL query. GoogleSQL is default.
+        :param sql_dialect: SQL Dialect of SQL query. GoogleSQL is default. Other option is DuckDBSQL.
 
         '''
         self.data_rules = data_rules
-        if sql_dialect != "GoogleSQL":
+        if sql_dialect not in ("GoogleSQL", "DuckDBSQL"):
             logging.warning("WARNING: SQLDIALECT: Only have support for GoogleSQL so far. Default value will be set to GoogleSQL!")
-        self.sql_dialect = "GoogleSQL"
+            self.sql_dialect = "GoogleSQL"
+        else:
+            self.sql_dialect = sql_dialect
         self._validate_schema()
         self.column_sql_rules, self.data_sql_rules = self._build_sql_conditions()
 
@@ -85,9 +87,20 @@ class SQLValidator:
         '''
         union_queries = []
 
+        cast_function = "SAFE_CAST" if self.sql_dialect == "GoogleSQL" else "TRY_CAST"
+        cast_type_wrong_value = "STRING" if self.sql_dialect == "GoogleSQL" else "VARCHAR"
+
         for column, check_name, params, error_msg, ignore_nulls, sql_condition in self.data_sql_rules:
 
-            _params = "NULL" if params is None else f"\"{params}\""
+            if self.sql_dialect == "GoogleSQL":
+                _params = "NULL" if params is None else f"\"{params}\""
+            else:
+                if params is None:
+                    _params = "NULL"
+                else:
+                    params = str(params).replace("'", "\"")
+                    _params = "NULL" if params is None else f"'{params}'"
+
             _error_msg = "NULL" if error_msg is None else error_msg
 
             query = f"""
@@ -97,7 +110,7 @@ class SQLValidator:
                     {_params} AS params,
                     {_error_msg} AS error_msg,
                     {ignore_nulls} AS ignore_nulls,
-                    SAFE_CAST({column} AS STRING) AS wrong_value
+                    {cast_function}({column} AS {cast_type_wrong_value}) AS wrong_value
                 FROM {from_source}
                 WHERE NOT ({sql_condition})
             """
@@ -116,7 +129,7 @@ class SQLValidator:
 
             )
 
-            SELECT column_name, check_name, params, error_msg, ignore_nulls, COUNT(DISTINCT(wrong_value)) AS n_wrong_values FROM tb
+            SELECT column_name, check_name, params, error_msg, ignore_nulls, COUNT(wrong_value) AS n_wrong_values FROM tb
             GROUP BY ALL
 
             """
