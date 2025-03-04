@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
-from sql_guard.translators import PanderaMapping
-from sql_guard.validator.CheckBase import ValidationCheck
+from sqlguard.translators import PanderaMapping
+from sqlguard.validator.CheckBase import ValidationCheck
 import logging
 
 class SchemaParser(ABC):

@@ -1,6 +1,6 @@
 from typing import Dict, List
-from sql_guard.validator.CheckBase import ValidationCheck
-from sql_guard.validator.CheckImplementations import CheckRegistry
+from sqlguard.validator.CheckBase import ValidationCheck
+from sqlguard.validator.CheckImplementations import CheckRegistry
 import logging
 
 class SQLValidator:

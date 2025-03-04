@@ -1,5 +1,5 @@
-from sql_guard.validator.CheckBase import BaseCheck, CheckRegistry
-from sql_guard.utils import SQLHelpers
+from sqlguard.validator.CheckBase import BaseCheck, CheckRegistry
+from sqlguard.utils import SQLHelpers
 from typing import Dict
 
 # Type Checks

@@ -1,13 +1,15 @@
 [project]
 name = "sql-guard"
-version = "0.0.2"
+version = "0.0.1"
 authors = [
   { name="Ygor Jesus", email="ygorj.skat@gmail.com" },
 ]
-description = "A small package for data quality using Standard SQL"
+description = "A small package for data quality using SQL"
 readme = "README.md"
 requires-python = ">=3.8"
 classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
 ]
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
