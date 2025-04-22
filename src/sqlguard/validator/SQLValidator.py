@@ -15,7 +15,7 @@ class SQLValidator:
         '''
         self.data_rules = data_rules
         if sql_dialect not in ("GoogleSQL", "DuckDBSQL"):
-            logging.warning("WARNING: SQLDIALECT: Only have support for GoogleSQL so far. Default value will be set to GoogleSQL!")
+            logging.warning("WARNING: SQLDIALECT: Only have support for GoogleSQL and DuckDBSQL so far. Default value will be set to GoogleSQL!")
             self.sql_dialect = "GoogleSQL"
         else:
             self.sql_dialect = sql_dialect
@@ -89,6 +89,7 @@ class SQLValidator:
 
         cast_function = "SAFE_CAST" if self.sql_dialect == "GoogleSQL" else "TRY_CAST"
         cast_type_wrong_value = "STRING" if self.sql_dialect == "GoogleSQL" else "VARCHAR"
+        to_json = 'PARSE_JSON' if self.sql_dialect == "GoogleSQL" else 'TO_JSON'
 
         for column, check_name, params, error_msg, ignore_nulls, sql_condition in self.data_sql_rules:
 
@@ -107,7 +108,7 @@ class SQLValidator:
                 SELECT
                     '{column}' AS column_name,
                     '{check_name}' AS check_name,
-                    {_params} AS params,
+                    {to_json}({_params}) AS params,
                     {_error_msg} AS error_msg,
                     {ignore_nulls} AS ignore_nulls,
                     {cast_function}({column} AS {cast_type_wrong_value}) AS wrong_value
