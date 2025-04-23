@@ -1,5 +1,5 @@
 [project]
-name = "sql-guard"
+name = "sql-guard-test-ygor-j"
 version = "0.0.1"
 authors = [
   { name="Ygor Jesus", email="ygorj.skat@gmail.com" },
@@ -11,3 +11,10 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
 ]
+
+license = "MIT"
+license-files = ["LICENSE"]
+
+[project.urls]
+Homepage = "https://github.com/Ygor-J/sql-guard"
+Issues = "https://github.com/Ygor-J/sql-guard/issues"

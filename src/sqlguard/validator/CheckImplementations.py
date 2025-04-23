@@ -145,7 +145,7 @@ class GreaterThanCheck(BaseCheck):
         value = params["value"]
         ignore_nulls_condition = SQLHelpers.get_ignore_nulls_condition(column, ignore_nulls)
         if type(value) in [int, float, bool]:
-            return f"{column} = {value}" + ignore_nulls_condition
+            return f"{column} != {value}" + ignore_nulls_condition
         return f"{column} != '{value}'" + ignore_nulls_condition
 
 @CheckRegistry.register("less_than")
