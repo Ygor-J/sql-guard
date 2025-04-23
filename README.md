@@ -40,7 +40,7 @@ failed: Boolean to indicate if the student failed the course based on grade (>=5
 
 From Scratch:
 ```
-from sql_guard.validator.CheckBase import ValidationCheck
+from sqlguard.validator.CheckBase import ValidationCheck
 
 
 data_rules = {
@@ -76,7 +76,7 @@ pandera_schema = pa.DataFrameSchema({
 
 ### I can convert DataFrameSchema to a compatible dictionary of data rules
 ```
-from sql_guard.translators import SchemaParsers
+from sqlguard.translators import SchemaParsers
 
 panderaParser = SchemaParsers.SchemaParser.get_parser("pandera")
 data_rules = panderaParser.parse(pandera_schema)
@@ -87,7 +87,7 @@ data_rules = panderaParser.parse(pandera_schema)
 As long as we have our `data_rules` dictionary, we can create a SQLValidator object that spits out a SQL query with your rules applied.
 
 ```
-from sql_guard.validator.SQLValidator import SQLValidator
+from sqlguard.validator.SQLValidator import SQLValidator
 
 sql_schema = SQLValidator(data_rules)
 validation_query = sql_schema.generate_sql_report(from_source=TABLE_PATH)
