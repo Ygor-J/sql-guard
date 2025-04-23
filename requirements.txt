@@ -1,0 +1,4 @@
+pip
+setuptools
+pandera==0.23.1
+duckdb==1.2.2
