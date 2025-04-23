@@ -1,6 +1,6 @@
 [project]
 name = "sql-guard-test-ygor-j"
-version = "0.0.1"
+version = "0.0.2"
 authors = [
   { name="Ygor Jesus", email="ygorj.skat@gmail.com" },
 ]
