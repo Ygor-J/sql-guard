@@ -1,6 +1,6 @@
 # SQL Data Validator
 
-A simple package for validating data using SQL. Only support for GoogleSQL at the moment.
+A simple package for validating data using SQL. Only support for GoogleSQL and DuckDB (PostgreSQL compatible) at the moment.
 
 ## Problem to be Solved
 
