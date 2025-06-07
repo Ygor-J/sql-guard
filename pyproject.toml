@@ -1,10 +1,10 @@
 [project]
-name = "sql-guard-test-ygor-j"
+name = "sql-guard"
 version = "0.0.2"
 authors = [
   { name="Ygor Jesus", email="ygorj.skat@gmail.com" },
 ]
-description = "A small package for data quality using SQL"
+description = "A small package for data quality rules using SQL"
 readme = "README.md"
 requires-python = ">=3.8"
 classifiers = [
