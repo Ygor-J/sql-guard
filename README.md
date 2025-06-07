@@ -1,3 +1,6 @@
+
+[![PyPI pyversions](https://pypi.org/static/images/logo-small.8998e9d1.svg)](https://pypi.python.org/pypi/sql-guard/)
+
 # SQL Guard - Guarding data rules through SQL
 
 A simple package for validating data using SQL. Only support for GoogleSQL (BigQuery) and DuckDB (PostgreSQL compatible).
