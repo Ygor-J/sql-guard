@@ -1,6 +1,6 @@
-# SQL Data Validator
+# SQL Guard - Guarding data rules through SQL
 
-A simple package for validating data using SQL. Only support for GoogleSQL and DuckDB (PostgreSQL compatible) at the moment.
+A simple package for validating data using SQL. Only support for GoogleSQL (BigQuery) and DuckDB (PostgreSQL compatible).
 
 ## Problem to be Solved
 
@@ -14,7 +14,7 @@ So instead of bringing that data to local memory, I thought it was just better t
 
 ## Conversion: SQL Guard x Pandera
 
-So imagine I hava a table like below.
+So imagine I have a table like below.
 
 The ideia is to have each row as the grade of a student.  
 ```
